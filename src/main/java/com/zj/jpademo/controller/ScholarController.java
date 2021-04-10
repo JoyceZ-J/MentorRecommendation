@@ -59,7 +59,7 @@ public class ScholarController {
         return  ScholarService.findScholarLikeName(name);
     }
 
-    //查询，通过学校查询一条
+    //查询，通过学校查询
     @RequestMapping("/findbydep")
     public List<Scholar> findByDep(String dep) {
         return  ScholarService.findScholarByDepartment(dep);
@@ -70,12 +70,12 @@ public class ScholarController {
         return ScholarService.findScholarByDepartmentLike(dep);
     }
 
-    //查询，通过name查询一条
+    //查询，通过领域查询
     @RequestMapping("/findbyfield")
     public List<Scholar> findByField(String field) {
         return  ScholarService.findScholarByField(field);
     }
-    //查询，通过like name查询多条
+
     @RequestMapping("/findbyfieldlike")
     public List<Scholar> findLikeField(String field) {
         return  ScholarService.findScholarByFieldLike(field);
