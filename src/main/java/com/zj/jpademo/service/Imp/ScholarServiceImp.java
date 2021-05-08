@@ -5,6 +5,9 @@ import com.zj.jpademo.domain.Scholar;
 import com.zj.jpademo.service.ScholarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -70,6 +73,19 @@ public class ScholarServiceImp  implements ScholarService {
     public List<Scholar> findScholarByFieldLike(String field)
     {
         return scholarRepository.findByFieldofStudyLike(field);
+    }
+
+    /**
+     * 分页查询
+     * @param pageNum
+     * @param size
+     * @return
+     */
+    @Override
+    public Page<Scholar> findByPage(Integer pageNum, Integer size) {
+        PageRequest pageRequest = PageRequest.of(pageNum - 1, size);
+        Page<Scholar> page= scholarRepository.findAll(pageRequest);
+        return page;
     }
 
 }
