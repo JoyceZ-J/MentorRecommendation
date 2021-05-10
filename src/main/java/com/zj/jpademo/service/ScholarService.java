@@ -46,7 +46,5 @@ public interface ScholarService {
      */
     public Page<Scholar> findByPage(Integer pageNum, Integer size);
 
-
-
-
 }
+

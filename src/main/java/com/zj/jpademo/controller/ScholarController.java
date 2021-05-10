@@ -1,27 +1,21 @@
 package com.zj.jpademo.controller;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.*;
 
 import com.zj.jpademo.domain.Scholar;
-import com.zj.jpademo.dao.ScholarRepository;
 import com.zj.jpademo.service.ScholarService;
+import com.zj.jpademo.domain.Daxuan;
 
 @RestController
 public class ScholarController {
     @Autowired
     private ScholarService ScholarService;
-    @Autowired
-    private ScholarRepository scholarRepository;
     //查询所有的学者信息
     @RequestMapping("/all")
     public List<Scholar> getallS()
@@ -96,6 +90,20 @@ public class ScholarController {
         System.out.println(pageNo);
         return ScholarService.findByPage(pageNo,10);
     }
+
+    @RequestMapping("/daxuan")
+    public String daxuan(String personname)
+    {
+        String json =" ";
+        Daxuan app = new Daxuan();
+        JsonObject o = app.getData(personname);
+        System.out.println(o);
+        json = new Gson().toJson(o);
+
+        System.out.println(json);
+        return json;
+    }
+
     /**
      public String list(@RequestParam(value="pageNo",required = false,defalutValue="1") String pageNostr,Map<String, Object> map )
      {
