@@ -3,6 +3,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.zj.jpademo.domain.ScholarNetwork;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -100,6 +101,18 @@ public class ScholarController {
         System.out.println(o);
         json = new Gson().toJson(o);
 
+        System.out.println(json);
+        return json;
+    }
+
+    @RequestMapping("/scholarnetwork")
+    public String scholarnetwork(String personname)
+    {
+        String json =" ";
+        ScholarNetwork sn = new ScholarNetwork();
+        JsonObject o = sn.getData(personname);
+        System.out.println(o);
+        json = new Gson().toJson(o);
         System.out.println(json);
         return json;
     }

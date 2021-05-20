@@ -15,7 +15,7 @@ public class Scholar {
     private String name;
     private String sex;
     private String department;
-    private String postRnak;
+    private String postRank;
     private String fieldofStudy;
     private String tel;
     private String email;
@@ -27,14 +27,14 @@ public class Scholar {
     public Scholar() {
     }
 
-    public Scholar(Integer id, String personID, String orgID, String name, String sex, String department, String postRnak, String fieldofStudy, String tel, String email, String eduBackg, String students) {
+    public Scholar(Integer id, String personID, String orgID, String name, String sex, String department, String postRank, String fieldofStudy, String tel, String email, String eduBackg, String students) {
         this.id = id;
         this.personID = personID;
         this.orgID = orgID;
         this.name = name;
         this.sex = sex;
         this.department = department;
-        this.postRnak = postRnak;
+        this.postRank = postRank;
         this.fieldofStudy = fieldofStudy;
         this.tel = tel;
         this.email = email;
@@ -50,7 +50,7 @@ public class Scholar {
                 ", name='" + name + '\'' +
                 ", sex='" + sex + '\'' +
                 ", department='" + department + '\'' +
-                ", postRnak='" + postRnak + '\'' +
+                ", postRnak='" + postRank + '\'' +
                 ", fieldofStudy='" + fieldofStudy + '\'' +
                 ", tel='" + tel + '\'' +
                 ", email='" + email + '\'' +
@@ -107,12 +107,12 @@ public class Scholar {
         this.department = department;
     }
 
-    public String getPostRnak() {
-        return postRnak;
+    public String getPostRank() {
+        return postRank;
     }
 
-    public void setPostRnak(String postRnak) {
-        this.postRnak = postRnak;
+    public void setPostRank(String postRank) {
+        this.postRank = postRank;
     }
 
     public String getFieldofStudy() {
