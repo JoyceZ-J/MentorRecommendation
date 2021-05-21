@@ -3,7 +3,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://159.75.27.46:3306/papers?useUnicode=true&characterEncoding=utf-8&userSSL=true&serverTimezone=UTC
+    url: jdbc:mysql://159.75.27.46:3306/pt
     username: root
     password: Tjubd..308
   jpa:

@@ -17,68 +17,68 @@ import com.zj.jpademo.domain.Daxuan;
 @RequestMapping("/scholar")
 public class ScholarController {
     @Autowired
-    private ScholarService ScholarService;
+    private ScholarService scholarService;
     //查询所有的学者信息
     @RequestMapping("/all")
     public List<Scholar> getallS()
-    {return ScholarService.getAllScholars();}
+    {return scholarService.getAllScholars();}
     //增加学者信息
     @RequestMapping("/add")
     public void addS()
     {   Scholar s = new Scholar();
         s.setName("");
-        ScholarService.addScholar(s);}
+        scholarService.addScholar(s);}
     //根据id查询学者信息
     @RequestMapping("/findbyid")
     Scholar getSbyid(int id)
     {
-        return ScholarService.getScholarById(id);
+        return scholarService.getScholarById(id);
     }
 
     @RequestMapping("/delbyid")
     //根据id删除学者信息
     public void delSbyid(int id)
     {
-        ScholarService.deleteScholarById(id);
+        scholarService.deleteScholarById(id);
     }
     @RequestMapping("/updatetype1")
     //更新学者信息
     public void updateS(Scholar scholar)
     {
-        ScholarService.updateScholar(scholar);
+        scholarService.updateScholar(scholar);
     }
 
     //查询，通过name查询
     @RequestMapping("/findbyname")
     public List<Scholar> findByScholarName(String name) {
-        return  ScholarService.findScholarByName(name);
+        return  scholarService.findScholarByName(name);
     }
 
     @RequestMapping("/findbynamelike")
     public List<Scholar> findLikeScholarName(String name) {
-        return  ScholarService.findScholarLikeName(name);
+        return  scholarService.findScholarLikeName(name);
     }
 
     //查询，通过学校查询
     @RequestMapping("/findbydep")
     public List<Scholar> findByDep(String dep) {
-        return  ScholarService.findScholarByDepartment(dep);
+        return  scholarService.findScholarByDepartment(dep);
     }
 
     @RequestMapping("/findbydeplike")
     public List<Scholar> findLikeDep(String dep) {
-        return ScholarService.findScholarByDepartmentLike(dep);
+        return scholarService.findScholarByDepartmentLike(dep);
     }
 
     //查询，通过领域查询
     @RequestMapping("/findbyfield")
     public List<Scholar> findByField(String field) {
-        return  ScholarService.findScholarByField(field);
+        return  scholarService.findScholarByField(field);
     }
 
     @RequestMapping("/findbyfieldlike")
     public List<Scholar> findLikeField(String field) {
-        return  ScholarService.findScholarByFieldLike(field);
+        return  scholarService.findScholarByFieldLike(field);
     }
 
     @RequestMapping("/findbypage")
@@ -90,7 +90,7 @@ public class ScholarController {
             if(pageNo < 1) { pageNo = 1;}
         }catch(Exception e){}
         System.out.println(pageNo);
-        return ScholarService.findByPage(pageNo,10);
+        return scholarService.findByPage(pageNo,10);
     }
 
     @RequestMapping("/daxuan")
@@ -131,7 +131,7 @@ public class ScholarController {
      pageNo = 1;
      }
      }catch (Exception e){}
-     Page<Scholar> page = ScholarService.getPage(pageNo, 5);
+     Page<Scholar> page = scholarService.getPage(pageNo, 5);
      map.put("page",page);
      return "emp/list"
      **/
