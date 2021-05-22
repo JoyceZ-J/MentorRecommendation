@@ -1,0 +1,51 @@
+package com.zj.jpademo.service.Imp;
+
+import com.zj.jpademo.dao.PatentBrazilRepository;
+import com.zj.jpademo.dao.PatentENRepository;
+import com.zj.jpademo.dao.PatentUSRepository;
+import com.zj.jpademo.domain.PatentBrazil;
+import com.zj.jpademo.domain.PatentEN;
+import com.zj.jpademo.domain.PatentUS;
+import com.zj.jpademo.service.PatentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+@Service
+public class PatentServiceImp implements PatentService {
+    @Resource
+    @Autowired
+    private PatentBrazilRepository patentBrazilRepository;
+
+    @Resource
+    @Autowired
+    private PatentENRepository patentENRepository;
+
+    @Resource
+    @Autowired
+    private PatentUSRepository patentUSRepository;
+
+    @Override
+    public Page<PatentBrazil> findPatentBrazilByPage(Integer pageNum, Integer size) {
+        PageRequest pageRequest = PageRequest.of(pageNum - 1, size);
+        Page<PatentBrazil> pages = patentBrazilRepository.findAll(pageRequest);
+        return pages;
+    }
+
+    @Override
+    public Page<PatentEN> findPatentENByPage(Integer pageNum, Integer size) {
+        PageRequest pageRequest = PageRequest.of(pageNum - 1, size);
+        Page<PatentEN> pages = patentENRepository.findAll(pageRequest);
+        return pages;
+    }
+
+    @Override
+    public Page<PatentUS> findPatentUSByPage(Integer pageNum, Integer size) {
+        PageRequest pageRequest = PageRequest.of(pageNum - 1, size);
+        Page<PatentUS> pages = patentUSRepository.findAll(pageRequest);
+        return pages;
+    }
+}

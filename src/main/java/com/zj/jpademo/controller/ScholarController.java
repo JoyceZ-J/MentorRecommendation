@@ -14,6 +14,7 @@ import com.zj.jpademo.service.ScholarService;
 import com.zj.jpademo.domain.Daxuan;
 
 @RestController
+@RequestMapping("/scholar")
 public class ScholarController {
     @Autowired
     private ScholarService ScholarService;

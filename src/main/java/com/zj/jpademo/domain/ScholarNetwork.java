@@ -60,7 +60,17 @@ public class ScholarNetwork
                         "        name\n" +
                         "        institute\n" +
                         "        }\n" +
+                        "        ~relation1\n" +
+                        "        {\n" +
+                        "        name\n" +
+                        "        institute\n" +
+                        "        }\n" +
                         "        relation2\n" +
+                        "        {\n" +
+                        "        name\n" +
+                        "        institute\n" +
+                        "        }\n" +
+                        "        ~relation2\n" +
                         "        {\n" +
                         "        name\n" +
                         "        institute\n" +
@@ -106,7 +116,29 @@ public class ScholarNetwork
                         JsonObject linkP = new JsonObject();
                         linkP.add("source", JsonParser.parseString(personName));
                         linkP.add("target", relatePerson.get("name"));
-                        linkP.add("value", JsonParser.parseString("师生"));
+                        linkP.add("value", JsonParser.parseString("学生"));
+                        if (!allLink.contains(linkP)) {
+                            allLink.add(linkP);
+                        }
+                    }
+                }
+            }
+            if (info.has("~relation1")) {
+                JsonArray relatePersonArray = info.get("~relation1").getAsJsonArray();
+                for (int i = 0; i < relatePersonArray.size(); i++) {
+                    JsonObject relatePerson = relatePersonArray.get(i).getAsJsonObject();
+                    if (!relatePerson.get("name").getAsString().equals(personName)) {
+                        JsonObject nodeP = new JsonObject();
+                        nodeP.add("name", relatePerson.get("name"));
+                        nodeP.add("category", JsonParser.parseString("1"));
+                        if (!allNode.contains(nodeP)) {
+                            allNode.add(nodeP);
+                        }
+
+                        JsonObject linkP = new JsonObject();
+                        linkP.add("source", JsonParser.parseString(personName));
+                        linkP.add("target", relatePerson.get("name"));
+                        linkP.add("value", JsonParser.parseString("导师"));
                         if (!allLink.contains(linkP)) {
                             allLink.add(linkP);
                         }
@@ -116,6 +148,28 @@ public class ScholarNetwork
 
             if (info.has("relation2")) {
                 JsonArray relatePersonArray = info.get("relation2").getAsJsonArray();
+                for (int i = 0; i < relatePersonArray.size(); i++) {
+                    JsonObject relatePerson = relatePersonArray.get(i).getAsJsonObject();
+                    if (!relatePerson.get("name").getAsString().equals(personName)) {
+                        JsonObject nodeP = new JsonObject();
+                        nodeP.add("name", relatePerson.get("name"));
+                        nodeP.add("category", JsonParser.parseString("1"));
+                        if (!allNode.contains(nodeP)) {
+                            allNode.add(nodeP);
+                        }
+
+                        JsonObject linkP = new JsonObject();
+                        linkP.add("source", JsonParser.parseString(personName));
+                        linkP.add("target", relatePerson.get("name"));
+                        linkP.add("value", JsonParser.parseString("合作"));
+                        if (!allLink.contains(linkP)) {
+                            allLink.add(linkP);
+                        }
+                    }
+                }
+            }
+            if (info.has("~relation2")) {
+                JsonArray relatePersonArray = info.get("~relation2").getAsJsonArray();
                 for (int i = 0; i < relatePersonArray.size(); i++) {
                     JsonObject relatePerson = relatePersonArray.get(i).getAsJsonObject();
                     if (!relatePerson.get("name").getAsString().equals(personName)) {
