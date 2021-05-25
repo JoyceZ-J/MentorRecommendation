@@ -3,14 +3,18 @@ package com.zj.jpademo.service.Imp;
 import com.zj.jpademo.dao.ScholarRepository;
 import com.zj.jpademo.domain.Scholar;
 import com.zj.jpademo.service.ScholarService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
 import java.util.List;
+
 @Service
 public class ScholarServiceImp  implements ScholarService {
     @Resource
@@ -88,4 +92,46 @@ public class ScholarServiceImp  implements ScholarService {
         return page;
     }
 
+    @Override
+    public Page<Scholar> findByCondition(Integer page, Integer size, String name, String sex,
+                                         String department, String postRank, String fieldofStudy,
+                                         String eduBackg, String tutor, String students, String patents, String papers) {
+        Pageable pageable = PageRequest.of(page, size);
+        return scholarRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<Predicate>();
+
+            if (StringUtils.isNotEmpty(name)) {
+                predicates.add(criteriaBuilder.like(root.get("name"), "%" + name + "%"));
+            }
+            if (StringUtils.isNotEmpty(sex)) {
+                predicates.add(criteriaBuilder.like(root.get("sex"), "%" + sex + "%"));
+            }
+            if (StringUtils.isNotEmpty(department)) {
+                predicates.add(criteriaBuilder.like(root.get("department"), "%" + department + "%"));
+            }
+            if (StringUtils.isNotEmpty(postRank)) {
+                predicates.add(criteriaBuilder.like(root.get("postRank"), "%" + postRank + "%"));
+            }
+            if (StringUtils.isNotEmpty(fieldofStudy)) {
+                predicates.add(criteriaBuilder.like(root.get("fieldofStudy"), "%" + fieldofStudy + "%"));
+            }
+            if (StringUtils.isNotEmpty(eduBackg)) {
+                predicates.add(criteriaBuilder.like(root.get("eduBackg"), "%" + eduBackg + "%"));
+            }
+            if (StringUtils.isNotEmpty(tutor)) {
+                predicates.add(criteriaBuilder.like(root.get("tutor"), "%" + tutor + "%"));
+            }
+            if (StringUtils.isNotEmpty(students)) {
+                predicates.add(criteriaBuilder.like(root.get("students"), "%" + students + "%"));
+            }
+            if (StringUtils.isNotEmpty(patents)) {
+                predicates.add(criteriaBuilder.like(root.get("patents"), "%" + patents + "%"));
+            }
+            if (StringUtils.isNotEmpty(papers)) {
+                predicates.add(criteriaBuilder.like(root.get("papers"), "%" + papers + "%"));
+            }
+
+            return criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()])).getRestriction();
+        }, pageable);
+    }
 }

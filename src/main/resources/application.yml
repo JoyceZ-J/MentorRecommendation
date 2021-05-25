@@ -3,7 +3,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://159.75.27.46:3306/pt
+    url: jdbc:mysql://159.75.27.46:3306/papers
     username: root
     password: Tjubd..308
   jpa:

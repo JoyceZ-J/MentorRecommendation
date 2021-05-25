@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.zj.jpademo.domain.ScholarNetwork;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.domain.Page;
 
@@ -116,6 +117,24 @@ public class ScholarController {
         json = new Gson().toJson(o);
         System.out.println(json);
         return json;
+    }
+
+    @RequestMapping("/findByCondition")
+    public Page<Scholar> findByCondition(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                                         @RequestParam(value = "size", defaultValue = "10") Integer size,
+                                         @RequestParam(value = "name", required = false)String name,
+                                         @RequestParam(value = "sex", required = false) String sex,
+                                         @RequestParam(value = "department", required = false) String department,
+                                         @RequestParam(value = "postRank", required = false) String postRank,
+                                         @RequestParam(value = "fieldofStudy", required = false) String fieldofStudy,
+                                         @RequestParam(value = "eduBackg", required = false)String eduBackg,
+                                         @RequestParam(value = "tutor", required = false) String tutor,
+                                         @RequestParam(value = "students", required = false) String students,
+                                         @RequestParam(value = "patents", required = false) String patents,
+                                         @RequestParam(value = "papers", required = false) String papers){
+        return scholarService.findByCondition(page, size, name, sex,
+                department, postRank, fieldofStudy, eduBackg, tutor,
+                students, patents, papers);
     }
 
     /**

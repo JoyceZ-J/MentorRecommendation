@@ -16,11 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RestController
+@RequestMapping("/patent")
 public class PatentController {
     @Autowired
     private PatentService patentService;
 
-    @RequestMapping("/patent/findByPage")
+    @RequestMapping("/findByPage")
     public void findByPage(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "country", defaultValue = "EN")String country, @RequestParam(value = "pageNo")int pageNo) throws ServletException, IOException {
         try
         {

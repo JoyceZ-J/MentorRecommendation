@@ -4,8 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity(name = "Scholar")
-@Table(name = "Scholars")//设置数据库中表名字
+@Entity(name = "Scholars")//设置数据库中表名字
 public class Scholar {
     @Id
     private Integer id;
