@@ -107,8 +107,8 @@ public class ScholarController {
         return json;
     }
 
-    @RequestMapping("/scholarnetwork")
-    public String scholarnetwork(String personname)
+    @RequestMapping("/scholarnetwork/findbyname")
+    public String scholarnetworkbyname(String personname)
     {
         String json =" ";
         ScholarNetwork sn = new ScholarNetwork();
@@ -119,6 +119,18 @@ public class ScholarController {
         return json;
     }
 
+    @RequestMapping("/scholarnetwork/findbyid")
+    public String scholarnetworkbyid(String personid)
+    {
+        personid = " "+personid;
+        String json =" ";
+        ScholarNetwork sn = new ScholarNetwork();
+        JsonObject o = sn.getDataByID(personid);
+        System.out.println(o);
+        json = new Gson().toJson(o);
+        System.out.println(json);
+        return json;
+    }
     @RequestMapping("/findByCondition")
     public Page<Scholar> findByCondition(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                          @RequestParam(value = "size", defaultValue = "10") Integer size,
