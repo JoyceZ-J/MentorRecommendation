@@ -93,7 +93,7 @@ public class ScholarServiceImp  implements ScholarService {
     }
 
     @Override
-    public Page<Scholar> findByCondition(Integer page, Integer size, String name, String sex,
+    public Page<Scholar> findByCondition(Integer page, Integer size, String name, String sex, String orgID,
                                          String department, String postRank, String fieldofStudy,
                                          String eduBackg, String tutor, String students, String patents, String papers) {
         Pageable pageable = PageRequest.of(page, size);
@@ -105,6 +105,9 @@ public class ScholarServiceImp  implements ScholarService {
             }
             if (StringUtils.isNotEmpty(sex)) {
                 predicates.add(criteriaBuilder.like(root.get("sex"), "%" + sex + "%"));
+            }
+            if (StringUtils.isNotEmpty(orgID)) {
+                predicates.add(criteriaBuilder.like(root.get("orgID"), "%" + orgID + "%"));
             }
             if (StringUtils.isNotEmpty(department)) {
                 predicates.add(criteriaBuilder.like(root.get("department"), "%" + department + "%"));

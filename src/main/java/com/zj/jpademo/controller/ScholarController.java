@@ -136,6 +136,7 @@ public class ScholarController {
                                          @RequestParam(value = "size", defaultValue = "10") Integer size,
                                          @RequestParam(value = "name", required = false)String name,
                                          @RequestParam(value = "sex", required = false) String sex,
+                                         @RequestParam(value = "orgID", required = false) String orgID,
                                          @RequestParam(value = "department", required = false) String department,
                                          @RequestParam(value = "postRank", required = false) String postRank,
                                          @RequestParam(value = "fieldofStudy", required = false) String fieldofStudy,
@@ -144,7 +145,7 @@ public class ScholarController {
                                          @RequestParam(value = "students", required = false) String students,
                                          @RequestParam(value = "patents", required = false) String patents,
                                          @RequestParam(value = "papers", required = false) String papers){
-        return scholarService.findByCondition(page, size, name, sex,
+        return scholarService.findByCondition(page, size, name, sex, orgID,
                 department, postRank, fieldofStudy, eduBackg, tutor,
                 students, patents, papers);
     }

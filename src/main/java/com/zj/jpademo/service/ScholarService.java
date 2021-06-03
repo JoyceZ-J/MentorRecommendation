@@ -47,7 +47,7 @@ public interface ScholarService {
     public Page<Scholar> findByPage(Integer pageNum, Integer size);
 
     //导师信息多条件查询
-    public Page<Scholar> findByCondition(Integer page, Integer size, String name, String sex, String department,
+    public Page<Scholar> findByCondition(Integer page, Integer size, String name, String sex, String orgID, String department,
             String postRank, String fieldofStudy, String eduBackg, String tutor, String students,
             String patents, String papers);
 
