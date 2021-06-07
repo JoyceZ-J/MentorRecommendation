@@ -26,7 +26,7 @@ public class CommunityController {
         JsonObject o = cn.get_data_and_links(cid);
         System.out.println(o);
         json = new Gson().toJson(o);
-        System.out.println(json);
+        //System.out.println(json);
         return json;
     }
 

@@ -137,6 +137,7 @@ public class CommunityNetwork
             }
             Map<String, String> vars = Collections.singletonMap("$a", cid);
             DgraphProto.Response res = txn.queryWithVars(query, vars);
+            System.out.println(query);
 
             // Deserialize
             JsonObject ppl = JsonParser.parseString(res.getJson().toStringUtf8()).getAsJsonObject();
@@ -145,7 +146,7 @@ public class CommunityNetwork
         }
 
 
-    public Map<String,List<JsonObject>> build_around_graph(String main,JsonArray arounds, List<JsonObject> data,  List<JsonObject> links, String color, Integer size, String remove)
+    public Map<String,List<JsonObject>> build_around_graph(String main,JsonArray arounds, List<JsonObject> data,  List<JsonObject> links, String color, String size, String remove)
     {
      /*
      构建中心是main，周围是arounds 的图
@@ -162,20 +163,23 @@ public class CommunityNetwork
         String around = String.valueOf(arounds.get(i).getAsJsonObject().get("cid"));
         if(around.equals(source)){continue;}
         JsonObject nodestyle = new JsonObject();
-        nodestyle.add("itemStyle",JsonParser.parseString(color));
+        nodestyle.addProperty("color",color);
+        System.out.println(color);
+        System.out.println(nodestyle);
         JsonObject node = new JsonObject();
-        node.addProperty("name", aroundname);
-        node.addProperty("id", around);
+        node.add("name", JsonParser.parseString(aroundname));
+        node.add("id", JsonParser.parseString(around));
         //node.addProperty("category", "1");
-        node.addProperty("symbolSize",size);
-        node.addProperty("itemStyle", String.valueOf(nodestyle));
+        node.add("symbolSize",JsonParser.parseString(size));
+        node.add("itemStyle", nodestyle);
+
         if (!data.contains(node)) {
             data.add(node);
         }
 
         JsonObject link = new JsonObject();
-        link.addProperty("source", source);
-        link.addProperty("target", around);
+        link.add("source", JsonParser.parseString(source));
+        link.add("target", JsonParser.parseString(around));
         if (!links.contains(link)) {
             links.add(link);
         }
@@ -200,25 +204,28 @@ public class CommunityNetwork
 
         JsonObject nodeCenter = new JsonObject();
         JsonObject nodestyle = new JsonObject();
-        nodestyle.add("itemStyle",JsonParser.parseString(COLOR_LIST.get(0)));
+        nodestyle.addProperty("color",COLOR_LIST.get(0));
+
         /*Map<String, String> nodestyle  = new HashMap<String, String>(){{
             put("itemStyle",COLOR_LIST.get(0));
         }};
 
          */
-        nodeCenter.addProperty("name", cname);
-        nodeCenter.addProperty("id", ccid);
+        nodeCenter.add("name", JsonParser.parseString(cname));
+        nodeCenter.add("id", JsonParser.parseString(ccid));
         //nodeCenter.addProperty("category", "0");
-        nodeCenter.addProperty("value", cdetail);
-        nodeCenter.addProperty("symbolSize",90);
-        nodeCenter.addProperty("itemStyle", String.valueOf(nodestyle));
+        nodeCenter.add("value", JsonParser.parseString(cdetail));
+        nodeCenter.add("symbolSize",JsonParser.parseString("90"));
+        nodeCenter.add("itemStyle", nodestyle);
         allNode.add(nodeCenter);
-
+        String color1 = COLOR_LIST.get(1);
+        String color2 = COLOR_LIST.get(2);
         //relation
         if (info.has("relation"))
         {
             JsonArray relateArray = info.get("relation").getAsJsonArray();
-            Map<String,List<JsonObject>> aroundinfo =build_around_graph(ccid, relateArray,allNode, allLink, COLOR_LIST.get(1), 50, "None");
+
+            Map<String,List<JsonObject>> aroundinfo =build_around_graph(ccid, relateArray,allNode, allLink, color1, "50", "None");
             allNode = aroundinfo.get("nodes");
             allLink = aroundinfo.get("links") ;
             for (int i = 0; i < relateArray.size(); i++) {
@@ -229,7 +236,7 @@ public class CommunityNetwork
                 if (relate1.has("relation"))
                 {
                     JsonArray relateArray2 = relate1.get("relation").getAsJsonArray();
-                    Map<String,List<JsonObject>> aroundinfo2 =build_around_graph(relate1id,relateArray2,allNode, allLink, COLOR_LIST.get(2), 40, "None");
+                    Map<String,List<JsonObject>> aroundinfo2 =build_around_graph(relate1id,relateArray2,allNode, allLink, color2, "40", "None");
                     allNode = aroundinfo2.get("nodes");
                     allLink = aroundinfo2.get("links") ;
                 }
@@ -239,7 +246,7 @@ public class CommunityNetwork
         if (info.has("~relation"))
         {
             JsonArray relateArray = info.get("~relation").getAsJsonArray();
-            Map<String,List<JsonObject>> aroundinfo =build_around_graph(ccid, relateArray,allNode, allLink, COLOR_LIST.get(1), 50, "None");
+            Map<String,List<JsonObject>> aroundinfo =build_around_graph(ccid, relateArray,allNode, allLink, color1, "50", "None");
             allNode = aroundinfo.get("nodes");
             allLink = aroundinfo.get("links") ;
             for (int i = 0; i < relateArray.size(); i++) {
@@ -248,7 +255,7 @@ public class CommunityNetwork
                 if (relate1.has("~relation"))
                 {
                     JsonArray relateArray2 = relate1.get("~relation").getAsJsonArray();
-                    Map<String,List<JsonObject>> aroundinfo2 =build_around_graph(relate1id, relateArray2,allNode, allLink, COLOR_LIST.get(2), 40, "None");
+                    Map<String,List<JsonObject>> aroundinfo2 =build_around_graph(relate1id, relateArray2,allNode, allLink, color2, "40", "None");
                     allNode = aroundinfo2.get("nodes");
                     allLink = aroundinfo2.get("links") ;
                 }
