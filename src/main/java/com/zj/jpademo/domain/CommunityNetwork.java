@@ -8,6 +8,8 @@ import io.dgraph.Transaction;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import io.grpc.stub.MetadataUtils;
 
 import java.util.*;
@@ -33,7 +35,7 @@ public class CommunityNetwork
        public List<String> COLOR_LIST = Arrays.asList( "#336699" , "#99CC99"  , "#FF9999"  , "#660099");
 
 
-        public JsonObject dgraphData(String cid)
+       public JsonObject dgraphDatabyid(String cid)
         {
             DgraphClient dgraphClient = createDgraphClient(false);
 
@@ -43,47 +45,96 @@ public class CommunityNetwork
             dgraphClient.alter(operation);
 
             Transaction txn = dgraphClient.newTransaction();
-            // Query
-            String query =
-                    "query all($a: string) {\n" +
-                            "      all(func: eq(cid, $a))\n" +
-                            "      {\n" +
-                            "        cid\n" +
-                            "        cname\n" +
-                            "        information\n" +
-                            "        relation\n" +
-                            "        {\n" +
-                            "        cid\n" +
-                            "        cname\n" +
-                            "        information\n" +
-                            "        relation\n" +
-                            "        {\n" +
-                            "        cid\n" +
-                            "        cname\n" +
-                            "        information\n" +
-                            "        }\n" +
-                            "        }\n" +
-                            "        ~relation\n" +
-                            "        {\n" +
-                            "        cid\n" +
-                            "        cname\n" +
-                            "        information\n" +
-                            "        ~relation\n" +
-                            "        {\n" +
-                            "        cid\n" +
-                            "        cname\n" +
-                            "        information\n" +
-                            "        }\n" +
-                            "        }\n" +
-                            "        expand(_all_)\n" +
-                            "        {\n" +
-                            "         cid\n" +
-                            "         cname\n" +
-                            "         information\n" +
-                            "         expand(_all_)\n" +
-                            "        }\n"+
-                            "      }\n" +
-                            "    }";
+            String query ="";
+            //判断输入的是id还是cname
+            if(cid.matches("[0-9]{1,}"))
+            {
+                // Query cid
+                query =
+                        "query all($a: string) {\n" +
+                                "      all(func: eq(cid, $a))\n" +
+                                "      {\n" +
+                                "        cid\n" +
+                                "        cname\n" +
+                                "        information\n" +
+                                "        relation\n" +
+                                "        {\n" +
+                                "        cid\n" +
+                                "        cname\n" +
+                                "        information\n" +
+                                "        relation\n" +
+                                "        {\n" +
+                                "        cid\n" +
+                                "        cname\n" +
+                                "        information\n" +
+                                "        }\n" +
+                                "        }\n" +
+                                "        ~relation\n" +
+                                "        {\n" +
+                                "        cid\n" +
+                                "        cname\n" +
+                                "        information\n" +
+                                "        ~relation\n" +
+                                "        {\n" +
+                                "        cid\n" +
+                                "        cname\n" +
+                                "        information\n" +
+                                "        }\n" +
+                                "        }\n" +
+                                "        expand(_all_)\n" +
+                                "        {\n" +
+                                "         cid\n" +
+                                "         cname\n" +
+                                "         information\n" +
+                                "         expand(_all_)\n" +
+                                "        }\n" +
+                                "      }\n" +
+                                "    }";
+            }
+            else
+            {
+                // Query cname
+                query =
+                        "query all($a: string) {\n" +
+                                "      all(func: eq(cname, $a))\n" +
+                                "      {\n" +
+                                "        cid\n" +
+                                "        cname\n" +
+                                "        information\n" +
+                                "        relation\n" +
+                                "        {\n" +
+                                "        cid\n" +
+                                "        cname\n" +
+                                "        information\n" +
+                                "        relation\n" +
+                                "        {\n" +
+                                "        cid\n" +
+                                "        cname\n" +
+                                "        information\n" +
+                                "        }\n" +
+                                "        }\n" +
+                                "        ~relation\n" +
+                                "        {\n" +
+                                "        cid\n" +
+                                "        cname\n" +
+                                "        information\n" +
+                                "        ~relation\n" +
+                                "        {\n" +
+                                "        cid\n" +
+                                "        cname\n" +
+                                "        information\n" +
+                                "        }\n" +
+                                "        }\n" +
+                                "        expand(_all_)\n" +
+                                "        {\n" +
+                                "         cid\n" +
+                                "         cname\n" +
+                                "         information\n" +
+                                "         expand(_all_)\n" +
+                                "        }\n" +
+                                "      }\n" +
+                                "    }";
+            }
             Map<String, String> vars = Collections.singletonMap("$a", cid);
             DgraphProto.Response res = txn.queryWithVars(query, vars);
 
@@ -94,7 +145,7 @@ public class CommunityNetwork
         }
 
 
-    public Map<String,List<JsonObject>> build_around_graph(String main, JsonArray arounds, List<JsonObject> data,  List<JsonObject> links, String color, Integer size, String remove)
+    public Map<String,List<JsonObject>> build_around_graph(String main,JsonArray arounds, List<JsonObject> data,  List<JsonObject> links, String color, Integer size, String remove)
     {
      /*
      构建中心是main，周围是arounds 的图
@@ -107,12 +158,14 @@ public class CommunityNetwork
     String source = main;
     for (int i = 0; i < arounds.size(); i++)
     {
-        String around = String.valueOf(arounds.get(i).getAsJsonObject().get("cname"));
+        String aroundname = String.valueOf(arounds.get(i).getAsJsonObject().get("cname"));
+        String around = String.valueOf(arounds.get(i).getAsJsonObject().get("cid"));
         if(around.equals(source)){continue;}
         JsonObject nodestyle = new JsonObject();
         nodestyle.add("itemStyle",JsonParser.parseString(color));
         JsonObject node = new JsonObject();
-        node.addProperty("name", around);
+        node.addProperty("name", aroundname);
+        node.addProperty("id", around);
         //node.addProperty("category", "1");
         node.addProperty("symbolSize",size);
         node.addProperty("itemStyle", String.valueOf(nodestyle));
@@ -137,8 +190,9 @@ public class CommunityNetwork
 
     public JsonObject get_data_and_links(String cid)
     {
-        JsonObject info = dgraphData(cid).getAsJsonArray("all").get(0).getAsJsonObject();
+        JsonObject info = dgraphDatabyid(cid).getAsJsonArray("all").get(0).getAsJsonObject();
         String cname = String.valueOf(info.get("cname"));
+        String ccid = String.valueOf(info.get("cid"));
         String cdetail = String.valueOf(info.get("information"));
         JsonObject allInfo = new JsonObject();
         List<JsonObject> allNode = new ArrayList<>();
@@ -153,6 +207,7 @@ public class CommunityNetwork
 
          */
         nodeCenter.addProperty("name", cname);
+        nodeCenter.addProperty("id", ccid);
         //nodeCenter.addProperty("category", "0");
         nodeCenter.addProperty("value", cdetail);
         nodeCenter.addProperty("symbolSize",90);
@@ -163,18 +218,20 @@ public class CommunityNetwork
         if (info.has("relation"))
         {
             JsonArray relateArray = info.get("relation").getAsJsonArray();
-            Map<String,List<JsonObject>> aroundinfo =build_around_graph(cname, relateArray,allNode, allLink, COLOR_LIST.get(1), 50, "None");
+            Map<String,List<JsonObject>> aroundinfo =build_around_graph(ccid, relateArray,allNode, allLink, COLOR_LIST.get(1), 50, "None");
             allNode = aroundinfo.get("nodes");
             allLink = aroundinfo.get("links") ;
             for (int i = 0; i < relateArray.size(); i++) {
                 JsonObject relate1 = relateArray.get(i).getAsJsonObject();
-                String relate1name = String.valueOf(relate1.get("cname"));
+                //String relate1name = String.valueOf(relate1.get("cname"));
+                String relate1id = String.valueOf(relate1.get("cid"));
+
                 if (relate1.has("relation"))
                 {
                     JsonArray relateArray2 = relate1.get("relation").getAsJsonArray();
-                    Map<String,List<JsonObject>> aroundinfo2 =build_around_graph(relate1name, relateArray2,allNode, allLink, COLOR_LIST.get(2), 40, "None");
-                    allNode = aroundinfo.get("nodes");
-                    allLink = aroundinfo.get("links") ;
+                    Map<String,List<JsonObject>> aroundinfo2 =build_around_graph(relate1id,relateArray2,allNode, allLink, COLOR_LIST.get(2), 40, "None");
+                    allNode = aroundinfo2.get("nodes");
+                    allLink = aroundinfo2.get("links") ;
                 }
             }
         }
@@ -182,18 +239,18 @@ public class CommunityNetwork
         if (info.has("~relation"))
         {
             JsonArray relateArray = info.get("~relation").getAsJsonArray();
-            Map<String,List<JsonObject>> aroundinfo =build_around_graph(cname, relateArray,allNode, allLink, COLOR_LIST.get(1), 50, "None");
+            Map<String,List<JsonObject>> aroundinfo =build_around_graph(ccid, relateArray,allNode, allLink, COLOR_LIST.get(1), 50, "None");
             allNode = aroundinfo.get("nodes");
             allLink = aroundinfo.get("links") ;
             for (int i = 0; i < relateArray.size(); i++) {
                 JsonObject relate1 = relateArray.get(i).getAsJsonObject();
-                String relate1name = String.valueOf(relate1.get("cname"));
+                String relate1id = String.valueOf(relate1.get("cid"));
                 if (relate1.has("~relation"))
                 {
                     JsonArray relateArray2 = relate1.get("~relation").getAsJsonArray();
-                    Map<String,List<JsonObject>> aroundinfo2 =build_around_graph(relate1name, relateArray2,allNode, allLink, COLOR_LIST.get(2), 40, "None");
-                    allNode = aroundinfo.get("nodes");
-                    allLink = aroundinfo.get("links") ;
+                    Map<String,List<JsonObject>> aroundinfo2 =build_around_graph(relate1id, relateArray2,allNode, allLink, COLOR_LIST.get(2), 40, "None");
+                    allNode = aroundinfo2.get("nodes");
+                    allLink = aroundinfo2.get("links") ;
                 }
             }
         }
@@ -202,5 +259,7 @@ public class CommunityNetwork
         allInfo.add("links", JsonParser.parseString(gson.toJson(allLink)));
         return allInfo;
     }
+
+
 
 }
