@@ -243,24 +243,24 @@ public class CommunityNetwork
             }
         }
         //~relation
-        if (info.has("~relation"))
-        {
-            JsonArray relateArray = info.get("~relation").getAsJsonArray();
-            Map<String,List<JsonObject>> aroundinfo =build_around_graph(ccid, relateArray,allNode, allLink, color1, "50", "None");
-            allNode = aroundinfo.get("nodes");
-            allLink = aroundinfo.get("links") ;
-            for (int i = 0; i < relateArray.size(); i++) {
-                JsonObject relate1 = relateArray.get(i).getAsJsonObject();
-                String relate1id = String.valueOf(relate1.get("cid"));
-                if (relate1.has("~relation"))
-                {
-                    JsonArray relateArray2 = relate1.get("~relation").getAsJsonArray();
-                    Map<String,List<JsonObject>> aroundinfo2 =build_around_graph(relate1id, relateArray2,allNode, allLink, color2, "40", "None");
-                    allNode = aroundinfo2.get("nodes");
-                    allLink = aroundinfo2.get("links") ;
-                }
-            }
-        }
+//        if (info.has("~relation"))
+//        {
+//            JsonArray relateArray = info.get("~relation").getAsJsonArray();
+//            Map<String,List<JsonObject>> aroundinfo =build_around_graph(ccid, relateArray,allNode, allLink, color1, "50", "None");
+//            allNode = aroundinfo.get("nodes");
+//            allLink = aroundinfo.get("links") ;
+//            for (int i = 0; i < relateArray.size(); i++) {
+//                JsonObject relate1 = relateArray.get(i).getAsJsonObject();
+//                String relate1id = String.valueOf(relate1.get("cid"));
+//                if (relate1.has("~relation"))
+//                {
+//                    JsonArray relateArray2 = relate1.get("~relation").getAsJsonArray();
+//                    Map<String,List<JsonObject>> aroundinfo2 =build_around_graph(relate1id, relateArray2,allNode, allLink, color2, "40", "None");
+//                    allNode = aroundinfo2.get("nodes");
+//                    allLink = aroundinfo2.get("links") ;
+//                }
+//            }
+//        }
         Gson gson = new Gson();
         allInfo.add("nodes", JsonParser.parseString(gson.toJson(allNode)));
         allInfo.add("links", JsonParser.parseString(gson.toJson(allLink)));
